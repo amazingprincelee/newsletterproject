@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const https = require("https");
+const { send } = require("process");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"))
@@ -9,6 +10,9 @@ app.use(express.static("public"))
 app.get("/", function(req, res){
     res.sendFile(__dirname + "/signup.html")
 })
+
+
+
 
 app.post("/", function(req, res){
     const firstName = req.body.firstName;
@@ -41,9 +45,9 @@ app.post("/", function(req, res){
     const request = https.request(url, option, function(response){
 
         if(response.statusCode === 200){
-            res.send("Successfully Subscribed");
+            res.sendFile(__dirname + "/success.html");
         }else{
-            res.send("There was an error. Please try again")
+            res.sendFile(__dirname + "/failure.html")
         }
 
         response.on("data", function(data){
@@ -56,6 +60,10 @@ app.post("/", function(req, res){
 
    
 
+})
+
+app.post("/failure.html", function(req, res){
+    res.redirect("/");
 })
 
 // 20f9de8614ebb1fcd75379925001e188-us13
